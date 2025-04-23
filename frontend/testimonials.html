@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUTRIFIT AI - Testimonials</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .testimonials-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .testimonial-card {
+            background-color: var(--card-background);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .testimonial-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+        .testimonial-info h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .testimonial-info p {
+            margin: 0;
+            color: #666;
+        }
+        .testimonial-rating {
+            color: #FFD700;
+            margin: 0.5rem 0;
+        }
+        .testimonial-text {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="testimonials.html">Testimonials</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <div class="testimonials-section">
+        <h1>What Our Users Say</h1>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="User" class="testimonial-image">
+                    <div class="testimonial-info">
+                        <h3>Sarah Johnson</h3>
+                        <p>Weight Loss Journey</p>
+                    </div>
+                </div>
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"NUTRIFIT AI transformed my fitness journey. The personalized plan helped me lose 20kg in 6 months!"</p>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="testimonial-image">
+                    <div class="testimonial-info">
+                        <h3>Michael Chen</h3>
+                        <p>Muscle Building</p>
+                    </div>
+                </div>
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"The workout plans are perfectly tailored to my goals. I've gained 10kg of muscle in just 4 months!"</p>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="User" class="testimonial-image">
+                    <div class="testimonial-info">
+                        <h3>Emily Rodriguez</h3>
+                        <p>Fitness Maintenance</p>
+                    </div>
+                </div>
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"The nutrition plan is amazing! I've never felt better and more energized in my life."</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

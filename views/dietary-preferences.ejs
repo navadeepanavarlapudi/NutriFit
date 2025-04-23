@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dietary Preferences - NutriFit AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+            z-index: 0;
+        }
+        .progress-bar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            z-index: 100;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            width: 99%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .dietary-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            width: 90%;
+            margin: 2rem auto;
+            margin-top: 60px;
+            transition: all 0.5s ease;
+        }
+        .slide {
+            background: rgba(255, 255, 255, 0.97);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            display: none;
+        }
+        .slide.active {
+            transform: translateY(0);
+            opacity: 1;
+            display: block;
+        }
+        .dietary-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .dietary-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .dietary-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+            transition: all 0.3s ease;
+        }
+        .dietary-option[data-diet="vegetarian"]::before {
+            background-image: url('https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3');
+        }
+        .dietary-option[data-diet="non-vegetarian"]::before {
+            background-image: url('https://images.unsplash.com/photo-1432139555190-58524dae6a55?ixlib=rb-4.0.3');
+        }
+        .dietary-option[data-diet="vegan"]::before {
+            background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3');
+        }
+        .dietary-option:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .dietary-option:hover::before {
+            opacity: 0.15;
+        }
+        .dietary-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f0f4ff 0%, #f7f0ff 100%);
+        }
+        .dietary-option h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #333;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+        .dietary-option p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 0;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .nav-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .btn-prev {
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+        }
+        .btn-prev:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        .btn-next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .btn-next.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .btn-next.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #333;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        .loading-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loading-container.active {
+            display: flex;
+        }
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+        .loading-spinner {
+            width: 100px;
+            height: 100px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite, glow 2s ease-in-out infinite;
+            margin-bottom: 2rem;
+        }
+        .loading-text {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .loading-subtext {
+            font-size: 1rem;
+            color: #aaa;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px #667eea; }
+            50% { box-shadow: 0 0 40px #764ba2; }
+            100% { box-shadow: 0 0 20px #667eea; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+    <div class="dietary-container">
+        <div class="slide active" id="dietarySlide">
+            <h2>Dietary Preferences</h2>
+            <p class="subtitle">Choose your dietary preference for personalized nutrition recommendations</p>
+
+            <form id="dietaryForm" method="POST" action="/submit-dietary">
+                <div class="dietary-options">
+                    <div class="dietary-option" data-diet="vegetarian">
+                        <h3>Vegetarian</h3>
+                        <p>Plant-based diet with dairy products and eggs</p>
+                    </div>
+                    <div class="dietary-option" data-diet="non-vegetarian">
+                        <h3>Non-Vegetarian</h3>
+                        <p>Includes all types of meat and animal products</p>
+                    </div>
+                    <div class="dietary-option" data-diet="vegan">
+                        <h3>Vegan</h3>
+                        <p>Strictly plant-based without any animal products</p>
+                    </div>
+                </div>
+                <input type="hidden" id="selectedDiet" name="dietaryPreference" required>
+                <div class="button-group">
+                    <button type="button" class="nav-btn btn-prev" onclick="window.location.href='/medical-assessment'">Previous</button>
+                    <button type="submit" class="nav-btn btn-next">Next</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="loading-container" id="loadingContainer">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Creating Your Perfect Plan</div>
+            <div class="loading-subtext">Analyzing your profile and preferences...</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dietaryOptions = document.querySelectorAll('.dietary-option');
+            const selectedDietInput = document.getElementById('selectedDiet');
+            const nextBtn = document.querySelector('.btn-next');
+            const form = document.getElementById('dietaryForm');
+            const dietarySlide = document.getElementById('dietarySlide');
+            const loadingContainer = document.getElementById('loadingContainer');
+
+            dietaryOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selected class from all options
+                    dietaryOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                    
+                    // Update hidden input
+                    selectedDietInput.value = option.dataset.diet;
+                    
+                    // Activate next button
+                    nextBtn.classList.add('active');
+
+                    // Slide down animation
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: document.body.scrollHeight,
+                            behavior: 'smooth'
+                        });
+                    }, 300);
+                });
+            });
+
+            // Form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (selectedDietInput.value) {
+                    // Show loading screen
+                    loadingContainer.classList.add('active');
+                    
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData);
+                    
+                    fetch('/submit-dietary', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Wait for 3 seconds before redirecting to show the loading animation
+                            setTimeout(() => {
+                                window.location.href = '/workout-plan';
+                            }, 3000);
+                        } else {
+                            console.error('Error submitting dietary preference');
+                            loadingContainer.classList.remove('active');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        loadingContainer.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

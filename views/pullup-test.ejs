@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pull-up Test - NutriFit AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: url('https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?ixlib=rb-4.0.3') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+            z-index: 0;
+        }
+        .progress-bar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            z-index: 100;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            width: 95%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .pullup-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            width: 90%;
+            margin: 2rem auto;
+            margin-top: 60px;
+            transition: all 0.5s ease;
+        }
+        .slide {
+            background: rgba(255, 255, 255, 0.97);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            display: none;
+        }
+        .slide.active {
+            transform: translateY(0);
+            opacity: 1;
+            display: block;
+        }
+        .pullup-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .pullup-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+        .pullup-option:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .pullup-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f0f4ff 0%, #f7f0ff 100%);
+        }
+        .pullup-option h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pullup-option p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .nav-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .btn-prev {
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+        }
+        .btn-prev:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        .btn-next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .btn-next.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .btn-next.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #333;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        .tip-box {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .tip-box p {
+            margin: 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+    <div class="pullup-container">
+        <div class="slide active" id="pullupSlide">
+            <h2>Pull-up Assessment</h2>
+            <p class="subtitle">How many pull-ups can you do with proper form in one go?</p>
+
+            <div class="tip-box">
+                <p>💡 Tip: A proper pull-up starts from a dead hang, pulling up until your chin is over the bar, with controlled movement.</p>
+            </div>
+
+            <form id="pullupForm" method="POST" action="/submit-pullup">
+                <div class="pullup-options">
+                    <div class="pullup-option" data-pullups="0">
+                        <h3>0</h3>
+                        <p>Can't do a pull-up yet. We'll help you build the strength!</p>
+                    </div>
+                    <div class="pullup-option" data-pullups="1-3">
+                        <h3>1-3</h3>
+                        <p>Beginning to develop upper body strength.</p>
+                    </div>
+                    <div class="pullup-option" data-pullups="4-8">
+                        <h3>4-8</h3>
+                        <p>Intermediate level. Good foundation of strength.</p>
+                    </div>
+                    <div class="pullup-option" data-pullups="9+">
+                        <h3>9+</h3>
+                        <p>Advanced level. Ready for challenging variations.</p>
+                    </div>
+                </div>
+                <input type="hidden" id="selectedPullups" name="pullups" required>
+                <div class="button-group">
+                    <button type="button" class="nav-btn btn-prev" onclick="window.location.href='/pushup-test'">Previous</button>
+                    <button type="submit" class="nav-btn btn-next">Next</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pullupOptions = document.querySelectorAll('.pullup-option');
+            const selectedPullupsInput = document.getElementById('selectedPullups');
+            const nextBtn = document.querySelector('.btn-next');
+            const form = document.getElementById('pullupForm');
+            const pullupSlide = document.getElementById('pullupSlide');
+
+            pullupOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selected class from all options
+                    pullupOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                    
+                    // Update hidden input
+                    selectedPullupsInput.value = option.dataset.pullups;
+                    
+                    // Activate next button
+                    nextBtn.classList.add('active');
+
+                    // Slide down animation
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: document.body.scrollHeight,
+                            behavior: 'smooth'
+                        });
+                    }, 300);
+                });
+            });
+
+            // Form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (selectedPullupsInput.value) {
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData);
+                    
+                    fetch('/submit-pullup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/squat-test';
+                        } else {
+                            console.error('Error submitting pullup assessment');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUTRIFIT AI - Your Personal Fitness Guide</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">NUTRIFIT AI</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="questionnaire-container">
+            <!-- Trainer Introduction Slide -->
+            <div class="slide active" id="slide1">
+                <div class="trainer-intro">
+                    <img src="images/trainer.jpg" alt="Michael Rajappan" class="trainer-image">
+                    <h2>Michael Rajappan</h2>
+                    <p class="experience">ACE Certified Personal Trainer | 14+ Years Experience</p>
+                    <div class="trainer-description">
+                        <p>Hi, I'm here to create a smart workout plan for you. The plan will be personalized based on your preferences. Please help me by answering the following questions. I promise it won't take more than 5 minutes.</p>
+                    </div>
+                    <a href="/gender" class="next-btn">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Gender Selection Slide -->
+            <div class="slide" id="slide2">
+                <h2>What is your gender?</h2>
+                <div class="options">
+                    <button class="option-btn" onclick="selectOption('male')">Male</button>
+                    <button class="option-btn" onclick="selectOption('female')">Female</button>
+                    <button class="option-btn" onclick="selectOption('other')">Other</button>
+                </div>
+                <div id="otherGenderInput" class="hidden">
+                    <input type="text" id="otherGender" placeholder="Please specify (optional)">
+                </div>
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Age Selection Slide -->
+            <div class="slide" id="slide3">
+                <h2>What is your age?</h2>
+                <input type="number" id="age" min="13" max="100" class="input-field">
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Weight Selection Slide -->
+            <div class="slide" id="slide4">
+                <h2>What is your weight (in kg)?</h2>
+                <input type="number" id="weight" min="30" max="200" class="input-field">
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Height Selection Slide -->
+            <div class="slide" id="slide5">
+                <h2>What is your height (in feet)?</h2>
+                <input type="number" id="height" min="4" max="7" step="0.1" class="input-field">
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Body Type Selection Slide -->
+            <div class="slide" id="slide6">
+                <h2>What is your body type?</h2>
+                <div class="body-type-options">
+                    <div class="body-type-card" onclick="selectBodyType('extremely-skinny')">
+                        <h3>Extremely Skinny</h3>
+                        <p>How they eat they don't get bulk</p>
+                    </div>
+                    <div class="body-type-card" onclick="selectBodyType('skinny-fat')">
+                        <h3>Skinny Fat</h3>
+                        <p>The body is slim but contains fat at the stomach</p>
+                    </div>
+                    <div class="body-type-card" onclick="selectBodyType('naturally-muscular')">
+                        <h3>Naturally Muscular</h3>
+                        <p>Naturally muscular and don't get fat easily</p>
+                    </div>
+                    <div class="body-type-card" onclick="selectBodyType('easily-gains')">
+                        <h3>Easily Gains</h3>
+                        <p>If they eat less content of fat they will become obese</p>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Fitness Goal Selection Slide -->
+            <div class="slide" id="slide7">
+                <h2>What is your fitness goal?</h2>
+                <div class="goal-options">
+                    <div class="goal-card" onclick="selectGoal('lose-weight')">
+                        <img src="images/lose-weight.jpg" alt="Lose Weight">
+                        <h3>Lose Weight</h3>
+                        <p>Burn fat and get lean</p>
+                    </div>
+                    <div class="goal-card" onclick="selectGoal('gain-muscle')">
+                        <img src="images/gain-muscle.jpg" alt="Gain Muscle">
+                        <h3>Gain Muscle</h3>
+                        <p>Build muscle mass and strength</p>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Workout Days Selection Slide -->
+            <div class="slide" id="slide8">
+                <h2>How many days per week do you want to workout?</h2>
+                <div class="days-options">
+                    <button class="day-btn" onclick="selectDays(3)">3 Days</button>
+                    <button class="day-btn" onclick="selectDays(4)">4 Days</button>
+                    <button class="day-btn" onclick="selectDays(5)">5 Days</button>
+                    <button class="day-btn" onclick="selectDays(6)">6 Days</button>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Pace Selection Slide -->
+            <div class="slide" id="slide9">
+                <h2>What is your preferred pace for results?</h2>
+                <div class="pace-options">
+                    <button class="pace-btn" onclick="selectPace('slow')">Slow (3-6 months)</button>
+                    <button class="pace-btn" onclick="selectPace('moderate')">Moderate (2-3 months)</button>
+                    <button class="pace-btn" onclick="selectPace('fast')">Fast (1-2 months)</button>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Fitness Level Selection Slide -->
+            <div class="slide" id="slide10">
+                <h2>What is your current fitness level?</h2>
+                <div class="fitness-level-options">
+                    <button class="level-btn" onclick="selectFitnessLevel('beginner')">Beginner</button>
+                    <button class="level-btn" onclick="selectFitnessLevel('intermediate')">Intermediate</button>
+                    <button class="level-btn" onclick="selectFitnessLevel('advanced')">Advanced</button>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Push-ups Selection Slide -->
+            <div class="slide" id="slide11">
+                <h2>How many push-ups can you do in one go?</h2>
+                <input type="number" id="pushups" min="0" class="input-field">
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Pull-ups Selection Slide -->
+            <div class="slide" id="slide12">
+                <h2>How many pull-ups can you do in one go?</h2>
+                <input type="number" id="pullups" min="0" class="input-field">
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Squats Selection Slide -->
+            <div class="slide" id="slide13">
+                <h2>How many squats can you do in one go?</h2>
+                <input type="number" id="squats" min="0" class="input-field">
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Medical Complications Slide -->
+            <div class="slide" id="slide14">
+                <h2>Do you have any medical complications?</h2>
+                <div class="medical-options">
+                    <button class="medical-btn" onclick="selectMedical('yes')">Yes</button>
+                    <button class="medical-btn" onclick="selectMedical('no')">No</button>
+                </div>
+                <div id="medicalDetails" class="hidden">
+                    <textarea id="medicalDescription" placeholder="Please describe your medical condition"></textarea>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="next-btn" onclick="nextSlide()">Next</button>
+                </div>
+            </div>
+
+            <!-- Dietary Habits Slide -->
+            <div class="slide" id="slide15">
+                <h2>What are your dietary habits?</h2>
+                <div class="diet-options">
+                    <button class="diet-btn" onclick="selectDiet('vegetarian')">Vegetarian</button>
+                    <button class="diet-btn" onclick="selectDiet('non-vegetarian')">Non-Vegetarian</button>
+                    <button class="diet-btn" onclick="selectDiet('vegan')">Vegan</button>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="prev-btn" onclick="prevSlide()">Previous</button>
+                    <button class="submit-btn" onclick="submitForm()">Submit</button>
+                </div>
+            </div>
+
+            <!-- Loading Slide -->
+            <div class="slide" id="loadingSlide">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <h2>Creating your personalized fitness plan...</h2>
+                </div>
+            </div>
+
+            <!-- Results Slide -->
+            <div class="slide" id="resultsSlide">
+                <div class="results-container">
+                    <h2>Your Personalized Fitness Plan</h2>
+                    <div id="workoutPlan"></div>
+                    <div id="nutritionPlan"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h3>Contact Us</h3>
+                    <p>Phone: 7207178718, 9848054099</p>
+                    <p>Email: info@nutrifitai.com</p>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
