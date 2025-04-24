@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized Workout Plan</title>
+</head>
+<body>
+    <h1>Your Personalized Workout Plan</h1>
+
+    <h2>Body Type: <%= bodyType %></h2>
+    <h2>Fitness Goal: <%= fitnessGoal %></h2>
+    <h2>Workout Frequency: <%= workoutFrequency %> times/week</h2>
+    <h2>Push-up Capacity: <%= pushupCapacity %></h2>
+    <h2>Pull-up Capacity: <%= pullupCapacity %></h2>
+    <h2>Squat Capacity: <%= squatCapacity %></h2>
+    <h2>Has Medical Condition: <%= hasMedicalCondition %></h2>
+    <h2>Medical Description: <%= medicalDescription %></h2>
+    <h2>Dietary Preference: <%= dietaryPreference %></h2>
+
+    <h3>AI-Generated Workout Plan:</h3>
+    <div>
+        <pre><%= aiGeneratedPlan %></pre>
+    </div>
+</body>
+</html>

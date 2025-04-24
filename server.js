@@ -1,14 +1,17 @@
 const express = require('express');
+const axios = require('axios');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
-
+const fetch = require('node-fetch');
+console.log('node-fetch version:', fetch); // Check if fetch is properly imported
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -195,12 +198,34 @@ app.post('/submit-dietary', (req, res) => {
     res.redirect('/workout-plan');
 });
 
-app.get('/workout-plan', (req, res) => {
+// app.get('/workout-plan', (req, res) => {
+//     if (!req.session.dietaryPreference) {
+//         res.redirect('/dietary-preferences');
+//         return;
+//     }
+//     res.render('workout-plan', {
+//         bodyType: req.session.bodyType || '',
+//         fitnessGoal: req.session.fitnessGoal || '',
+//         workoutFrequency: req.session.workoutFrequency || '',
+//         pushupCapacity: req.session.pushupCapacity || '',
+//         pullupCapacity: req.session.pullupCapacity || '',
+//         squatCapacity: req.session.squatCapacity || '',
+//         hasMedicalCondition: req.session.hasMedicalCondition || '',
+//         medicalDescription: req.session.medicalDescription || '',
+//         dietaryPreference: req.session.dietaryPreference || ''
+//     });
+// });
+
+
+app.get('/workout-plan', async (req, res) => {
+    // Check if dietary preference exists in the session
+    console.log("Session:", req.session);
     if (!req.session.dietaryPreference) {
-        res.redirect('/dietary-preferences');
-        return;
+        return res.redirect('/dietary-preferences');
     }
-    res.render('workout-plan', {
+
+    // Collect user data from session
+    const sessionData = {
         bodyType: req.session.bodyType || '',
         fitnessGoal: req.session.fitnessGoal || '',
         workoutFrequency: req.session.workoutFrequency || '',
@@ -210,7 +235,33 @@ app.get('/workout-plan', (req, res) => {
         hasMedicalCondition: req.session.hasMedicalCondition || '',
         medicalDescription: req.session.medicalDescription || '',
         dietaryPreference: req.session.dietaryPreference || ''
-    });
+    };
+
+    try {
+        // Send data to the Flask API to generate the workout plan
+        const response = await fetch('http://localhost:5000/process-workout-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(sessionData),
+        });
+
+        const aiResponse = await response.json();  // Parse JSON response
+        console.log("Raw AI response:", aiResponse);  // Log raw response for debugging
+
+        // Check if the AI generated a workout plan and if not, show a fallback message
+        const aiGeneratedPlan = aiResponse.aiGeneratedPlan || 'No workout plan generated. Please try again later.';
+
+        // Render the workout plan page with the response from the AI
+        res.render('workout-plan', {
+            ...sessionData,
+            aiGeneratedPlan: aiGeneratedPlan  // Display the AI-generated workout plan
+        });
+    } catch (error) {
+        console.error('Error calling Python API:', error);
+        res.status(500).send('Something went wrong');
+    }
 });
 
 // Start server
